@@ -21,7 +21,7 @@ env.cloudfiles_api_key = 'my_rackspace_api_key'
 env.cloudfiles_container = 'my_cloudfiles_container'
 
 # Github Pages configuration
-env.github_pages_branch = "master"
+env.github_pages_branch = "gh-pages"
 
 # Port for `serve`
 PORT = 8000
@@ -37,8 +37,9 @@ def build():
     local('pelican -s pelicanconf.py')
 
 def rebuild():
-    """`build` with the delete switch"""
-    local('pelican -d -s pelicanconf.py')
+    """`clean` then `build`"""
+    clean()
+    build()
 
 def regenerate():
     """Automatically regenerate site upon file modification"""
@@ -89,4 +90,13 @@ def publish():
 def gh_pages():
     """Publish to GitHub Pages"""
     rebuild()
-    local("ghp-import -b {github_pages_branch} {deploy_path} -p".format(**env))
+    local("ghp-import -b {github_pages_branch} {deploy_path}".format(**env))
+    local("git push origin {github_pages_branch}".format(**env))
+
+def publishghp(msg):
+    preview() #builds publishconf.py
+    local("git add -A") #will commit allll files, be careful
+    local("git commit -m '%s'"%msg)
+    local("ghp-import -m '%s' -b master output"%msg)
+    local("git push --all")
+
