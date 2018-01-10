@@ -8,7 +8,8 @@ SITENAME = u'Attracting.Point'
 SITEURL = ''
 
 PATH = 'content'
-
+PLUGIN_PATHS = ["plugins", "/home/schwarzian/Desktop/pelican-plugins/"]
+PLUGINS = ["render_math"]
 TIMEZONE = 'America/Chicago'
 
 DEFAULT_LANG = u'en'
