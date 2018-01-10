@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>An Introduction to Approximate Bayesian computation | Attracting.Point</title>
+  <meta charset="utf-8">
+<meta name="description" content="Bayesian methods are increasingly valuable to scientists, given their flexibility, ease of use and intuitive nature, as compared to more classical 'frequentist' methods (they're also much more easily used naively, which is good, as many scientists are not trained statisticians). However, Bayesian methods are often quite computationally expensive, typically ..."><meta name="author" content="Joel Eliason">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="/theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link href="/" type="application/atom+xml" rel="alternate" title="Attracting.Point ATOM Feed" />
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="">Attracting.Point</a></div>
+  <div class="small"></div>
+    <div class="nav">
+    </div>
+</div>    <div id="main">
+<h2><a href="/an-introduction-to-approximate-bayesian-computation.html">An Introduction to Approximate Bayesian computation</a></h2>
+<h5><i class="icon-feather"></i> Wed 10 January 2018
+<i class="icon-bookmarks"></i>
+</h5>
+
+<p>Bayesian methods are increasingly valuable to scientists, given their flexibility, ease of use and intuitive nature, as compared to more classical 'frequentist' methods (they're also much more easily used naively, which is good, as many scientists are not trained statisticians). However, Bayesian methods are often quite computationally expensive, typically due to the computation of something called the posterior (more on this below). In this post, I will be giving a brief overview of how Bayesian methods can be used in the process of model selection, i.e., selecting the best mathematical model for a given process or phenomenon from a group of models. Then, I will be looking at methods that can circumvent the difficulties that arise when you don't have a 'closed-form', analytical probability distribution for your data based on your model (this is called the model likelihood, by the way), since many Bayesian computations depend on you having this information at hand. So, without further ado, let's get started!</p>
+<h3>A 10-Second Tutorial on Bayesian Model Selection</h3>
+<p>(More of this can be found at Jake VanderPlas' blog post on the same subject)</p>
+<ul>
+<li>I want to find the model, $M$, that best describes my data. This is different from finding the best parameterization of my model, which assumes that I already have the best model (though this is another important statistical problem and is called model fitting.</li>
+<li>I can compare my models using something called the model posterior, that is, $P(M_{i}|D)$. This is the probability of model $M$ given that we know our data (this is as opposed to using the model likelihood $P(D|M)$ to evaluate models, as was explained above)</li>
+<li>The model posterior can be obtained from the model likelihood using Bayes' rule, that is, $P(M|D) = \frac{P(D|M)P(M)}{P(D)}$</li>
+<li>We actually compare models using the Bayes factor, ie, , since we $P(D)$ is not often well-defined
+Many statistical problems do have direct access to a closed-from likelihood function. However, many do not. This is where Approximate Bayesian computation comes in!</li>
+</ul>
+<h3>Approximate Bayesian computation</h3>
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2014&nbsp;::</li>
+    <li class="footer"><a href="">Attracting.Point </a>&nbsp;::</li>
+    <li class="footer">powered by <a href="https://github.com/getpelican">pelican</a>&nbsp;::</li>
+    <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed.ru">CC BY-NC</a></li>
+</ul>
+</div></body>
+</html>
