@@ -27,13 +27,68 @@
 <h3>A 10-Second Tutorial on Bayesian Model Selection</h3>
 <p>(More of this can be found at Jake VanderPlas' blog post on the same subject)</p>
 <ul>
-<li>I want to find the model, $M$, that best describes my data. This is different from finding the best parameterization of my model, which assumes that I already have the best model (though this is another important statistical problem and is called model fitting.</li>
-<li>I can compare my models using something called the model posterior, that is, $P(M_{i}|D)$. This is the probability of model $M$ given that we know our data (this is as opposed to using the model likelihood $P(D|M)$ to evaluate models, as was explained above)</li>
-<li>The model posterior can be obtained from the model likelihood using Bayes' rule, that is, $P(M|D) = \frac{P(D|M)P(M)}{P(D)}$</li>
-<li>We actually compare models using the Bayes factor, ie, , since we $P(D)$ is not often well-defined
+<li>I want to find the model, <span class="math">\(M\)</span>, that best describes my data. This is different from finding the best parameterization of my model, which assumes that I already have the best model (though this is another important statistical problem and is called model fitting.</li>
+<li>I can compare my models using something called the model posterior, that is, <span class="math">\(P(M_{i}|D)\)</span>. This is the probability of model <span class="math">\(M\)</span> given that we know our data (this is as opposed to using the model likelihood <span class="math">\(P(D|M)\)</span> to evaluate models, as was explained above)</li>
+<li>The model posterior can be obtained from the model likelihood using Bayes' rule, that is, <span class="math">\(P(M|D) = \frac{P(D|M)P(M)}{P(D)}\)</span></li>
+<li>We actually compare models using the Bayes factor, ie, , since we <span class="math">\(P(D)\)</span> is not often well-defined
 Many statistical problems do have direct access to a closed-from likelihood function. However, many do not. This is where Approximate Bayesian computation comes in!</li>
 </ul>
 <h3>Approximate Bayesian computation</h3>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
 
 <p align="center"><a href="#">on the top</a></p>
     </div>
