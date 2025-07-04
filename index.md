@@ -1,21 +1,22 @@
 ---
 layout: about
 permalink: /
+title: "About"
 profile:
   align: right
-  image: profile.png
+  image: profile.png      # replace if you use a different filename
 published: true
 ---
 
-[Gradfolio](https://github.com/jitinnair1/gradfolio){:target="_blank"} is a responsive, dark-mode ready Jekyll theme designed keeping academia in mind. The easiest way to install the theme is to fork it using GitHub. Check the README file for [instructions](https://github.com/jitinnair1/gradfolio#installation){:target="_blank"}.
+I study the tumour microenvironment through multiscale and mechanistic statistical modelling.  
+My work integrates Bayesian spatial statistics with quantitative systems pharmacology to clarify how cellular interactions influence clinical outcomes.
 
-If you want to use this space to write your biography here, edit the `index.md` file. You can put a picture in, too. Rename your picture to `profile.png` and put it in the `assets/images/` folder.
+---
 
-The social-icons footer can be used to link profiles from GitHub, OrcID and ReasearchGate aprart form the usual Twitter, LinkedIn and Facebook. You can add your user ID in the `_config.yml` file to link your accounts.
+### Research interests
+- Bayesian hierarchical and multilevel modelling  
+- Spatial point‐process methods for multiplexed tissue imaging  
+- Simulation-based calibration of QSP models  
+- Uncertainty quantification and validation in mechanistic oncology models
 
-PS: If you liked the theme, do star it on GitHub!
-
-### Also, check out:
-
-- [autoCV](https://github.com/jitinnair1/autocv) - a LaTeX template that builds and deploys the CV using GitHub Actions, so you will always have a ready link for your latest CV
-- [Tail](https://github.com/jitinnair1/tail) - a minimal, quick-setup template for a blog
+---
