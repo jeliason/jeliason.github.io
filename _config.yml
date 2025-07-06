@@ -13,12 +13,12 @@ permalink: /blog/:year/:title/
 paginate_path: /blog/page:num/
 
 # Social media links in footer
-linkedin: "joel-eliason/"
 github: "jeliason"
+linkedin: "joel-eliason/"
 # researchgate: "#"
-orcid: "0000-0003-2227-8727"
+# orcid: "0000-0003-2227-8727"
 # x: "#"
-bluesky: "jeliason.bsky.social"
+# bluesky: "jeliason.bsky.social"
 
 # Markdown
 highlighter: rouge

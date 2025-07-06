@@ -4,19 +4,17 @@ permalink: /
 title: "About"
 profile:
   align: right
-  image: profile.png      # replace if you use a different filename
+  image: profile.jpeg
 published: true
 ---
 
-I study the tumour microenvironment through multiscale and mechanistic statistical modelling.  
-My work integrates Bayesian spatial statistics with quantitative systems pharmacology to clarify how cellular interactions influence clinical outcomes.
+I study the tumor microenvironment and the tumor-immunity cycle through multiscale and mechanistic statistical modelling in the [Popel lab](https://popellab.johnshopkins.edu/) - in particular, I am very focused on constructing *well-calibrated*, *verified*, *validated* and *literature-supported* mechanistic models of tumor-immune interactions.
 
 ---
 
 ### Research interests
-- Bayesian hierarchical and multilevel modelling  
+- Uncertainty quantification and validation in mechanistic immune-oncology models
+- Bayesian modeling of hierarchical and multi-likelihood (joint) datasets
 - Spatial point‐process methods for multiplexed tissue imaging  
-- Simulation-based calibration of QSP models  
-- Uncertainty quantification and validation in mechanistic oncology models
 
 ---
