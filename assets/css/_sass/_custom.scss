@@ -3,3 +3,102 @@ html,
 body {
   box-sizing: border-box;
 }
+
+/* Blog post list styling */
+.article-list {
+  h2 {
+    margin-bottom: 0.2em;
+    font-size: 1.4em;
+  }
+
+  .post-meta {
+    color: #888;
+    font-size: 0.85em;
+    margin-bottom: 0.5em;
+  }
+
+  .post-excerpt {
+    margin-bottom: 2em;
+    color: #555;
+
+    @media (prefers-color-scheme: dark) {
+      color: #aaa;
+    }
+  }
+}
+
+/* Individual post page styling */
+.post-headline {
+  margin-bottom: 0.2em;
+}
+
+.meta {
+  color: #888;
+  margin-bottom: 1.5em;
+}
+
+/* Tag styling */
+.tag, .tag-link {
+  background-color: #f0f0f0;
+  padding: 0.15em 0.5em;
+  border-radius: 3px;
+  font-size: 0.85em;
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #333;
+  }
+}
+
+.tag-link {
+  text-decoration: none;
+  &:hover {
+    background-color: #ddd;
+    @media (prefers-color-scheme: dark) {
+      background-color: #444;
+    }
+  }
+}
+
+/* Tags page */
+.tags-list {
+  margin: 1.5em 0;
+}
+
+.tag-chip {
+  display: inline-block;
+  background-color: #f0f0f0;
+  padding: 0.3em 0.8em;
+  margin: 0.2em;
+  border-radius: 15px;
+  text-decoration: none;
+
+  &:hover {
+    background-color: #ddd;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #333;
+    &:hover {
+      background-color: #444;
+    }
+  }
+}
+
+.tag-section {
+  margin: 2em 0;
+
+  ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  li {
+    margin: 0.5em 0;
+  }
+
+  .post-date {
+    color: #888;
+    font-size: 0.85em;
+    margin-left: 0.5em;
+  }
+}

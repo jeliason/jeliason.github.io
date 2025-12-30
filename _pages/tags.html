@@ -1,0 +1,60 @@
+---
+layout: default
+title: Tags
+permalink: /tags/
+---
+
+<h1>Tags</h1>
+
+{% assign all_tags = "" | split: "" %}
+{% for post in site.posts %}
+  {% assign dominated = false %}
+  {% for tag in post.tags %}
+    {% if site.blocked_tags contains tag %}
+      {% assign dominated = true %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+  {% unless dominated %}
+    {% for tag in post.tags %}
+      {% unless site.blocked_tags contains tag %}
+        {% unless all_tags contains tag %}
+          {% assign all_tags = all_tags | push: tag %}
+        {% endunless %}
+      {% endunless %}
+    {% endfor %}
+  {% endunless %}
+{% endfor %}
+
+{% assign sorted_tags = all_tags | sort %}
+
+<div class="tags-list">
+{% for tag in sorted_tags %}
+  <a href="#{{ tag | slugify }}" class="tag-chip">{{ tag }}</a>
+{% endfor %}
+</div>
+
+{% for tag in sorted_tags %}
+<section id="{{ tag | slugify }}" class="tag-section">
+  <h2>{{ tag }}</h2>
+  <ul>
+    {% for post in site.posts %}
+      {% if post.tags contains tag %}
+        {% assign dominated = false %}
+        {% for t in post.tags %}
+          {% if site.blocked_tags contains t %}
+            {% assign dominated = true %}
+            {% break %}
+          {% endif %}
+        {% endfor %}
+        {% unless dominated %}
+          <li>
+            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+            <span class="post-date">{{ post.date | date: "%B %d, %Y" }}</span>
+          </li>
+        {% endunless %}
+      {% endif %}
+    {% endfor %}
+  </ul>
+</section>
+{% endfor %}

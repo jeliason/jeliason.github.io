@@ -12,6 +12,13 @@ paginate: 4
 permalink: /blog/:year/:title/
 paginate_path: /blog/page:num/
 
+# Blog settings
+# Posts with any of these tags will be hidden from the blog listing
+# Useful for drafts or posts about unpublished papers
+blocked_tags:
+  - unpublished
+  - draft
+
 # Social media links in footer
 github: "jeliason"
 linkedin: "joel-eliason/"
