@@ -4,6 +4,41 @@ body {
   box-sizing: border-box;
 }
 
+/* Site header link styling */
+.site-header-link {
+  text-decoration: none;
+  color: inherit;
+
+  &:hover {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+/* Blog header */
+.blog-header {
+  margin-top: 2em;
+  margin-bottom: 2em;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+
+  p {
+    color: #666;
+    font-size: 1.1em;
+    margin: 0;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    border-top-color: #444;
+    border-bottom-color: #444;
+    p {
+      color: #aaa;
+    }
+  }
+}
+
 /* Blog post list styling */
 .article-list {
   h2 {
