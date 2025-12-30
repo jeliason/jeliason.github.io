@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1" name="viewport">
+        <link rel="stylesheet" href="/assets/css/main.css">
+
+        <a href="/" class="site-header-link">
+            <h1 class="post-headline">Joel Eliason</h1>
+            <h3 class="post-description">Postdoctoral Researcher | Popel Lab | Johns Hopkins University</h3>
+        </a>
+
+        <div class="links scroll">
+        <a href="/">Home</a>
+        <a href="https://scholar.google.com/citations?hl=en&user=tuxtAe8AAAAJ&view_op=list_works&sortby=pubdate">Google Scholar</a>
+        <a href="/projects/">Projects</a>
+        <a href="/blog/">Blog</a>
+        <a href="/assets/docs/cv.pdf">CV</a>
+
+</div>
+
+
+        <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Joint Modeling of Tumor–Immune Spatial Interactions | Joel Eliason</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Joint Modeling of Tumor–Immune Spatial Interactions" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A statistically grounded approach to modeling tumor–immune spatial interactions using joint species distribution models on imaging mass cytometry data." />
+<meta property="og:description" content="A statistically grounded approach to modeling tumor–immune spatial interactions using joint species distribution models on imaging mass cytometry data." />
+<link rel="canonical" href="https://joeleliason.com/projects/mgpp-tme/" />
+<meta property="og:url" content="https://joeleliason.com/projects/mgpp-tme/" />
+<meta property="og:site_name" content="Joel Eliason" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-12-30T06:37:47+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Joint Modeling of Tumor–Immune Spatial Interactions" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-12-30T06:37:47+00:00","datePublished":"2025-12-30T06:37:47+00:00","description":"A statistically grounded approach to modeling tumor–immune spatial interactions using joint species distribution models on imaging mass cytometry data.","headline":"Joint Modeling of Tumor–Immune Spatial Interactions","mainEntityOfPage":{"@type":"WebPage","@id":"https://joeleliason.com/projects/mgpp-tme/"},"url":"https://joeleliason.com/projects/mgpp-tme/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+        <!-- insert favicons, used https://realfavicongenerator.net/ -->
+<link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/assets/favicon/site.webmanifest" />
+
+
+        <!-- MathJax -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: { inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+     processEscapes: true
+    }
+  });
+</script>
+
+
+        <!-- Load fontawesome here for faster loadtimes: https://stackoverflow.com/a/35880730/9523246 -->
+        <script type="text/javascript"> (function() { var css = document.createElement('link'); css.href = 'https://use.fontawesome.com/releases/v6.7.2/css/all.css'; css.rel = 'stylesheet'; css.type = 'text/css'; document.getElementsByTagName('head')[0].appendChild(css); })(); </script>
+
+    </head>
+
+    <body>
+        <main>
+            <article>
+                <h1 class="post-headline">Joint Modeling of Tumor–Immune Spatial Interactions</h1>
+<p class="meta">
+  <small>December 30, 2025</small>
+  
+    <small> ·
+      
+        <a href="/tags/tumor%20microenvironment/" class="tag-link">tumor microenvironment</a>, 
+      
+        <a href="/tags/spatial%20point%20processes/" class="tag-link">spatial point processes</a>, 
+      
+        <a href="/tags/Gibbs%20models/" class="tag-link">Gibbs models</a>, 
+      
+        <a href="/tags/joint%20species%20distribution%20models/" class="tag-link">joint species distribution models</a>, 
+      
+        <a href="/tags/spatial%20omics/" class="tag-link">spatial omics</a>, 
+      
+        <a href="/tags/imaging%20mass%20cytometry/" class="tag-link">imaging mass cytometry</a>, 
+      
+        <a href="/tags/ecological%20modeling/" class="tag-link">ecological modeling</a>, 
+      
+        <a href="/tags/colorectal%20cancer/" class="tag-link">colorectal cancer</a>, 
+      
+        <a href="/tags/cell%E2%80%93cell%20interactions/" class="tag-link">cell–cell interactions</a>
+      
+    </small>
+  
+</p>
+
+<h2 id="summary">Summary</h2>
+
+<p>We present a statistical framework for modeling cell–cell spatial interactions in the tumor microenvironment (TME) using multitype Gibbs point process (MGPP) models as joint species distribution models (JSDMs). Applied to imaging mass cytometry data from 35 colorectal cancer patients, our approach captures spatial dependencies among 16 cell types, adjusts for microenvironmental covariates, and reveals prognostic tumor–immune and stromal–immune relationships. Granulocyte interactions emerged as strong survival predictors, with spatial patterns varying across immune subtypes.</p>
+
+<h2 id="what-can-mgpp-models-answer">What Can MGPP Models Answer?</h2>
+
+<p>MGPP models let us formally address key questions about spatial structure and function in the TME:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>General Question</th>
+      <th>Specific to the TME</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Are cell types <em>positively</em> or <em>negatively</em> correlated in space, adjusting for other cells and covariates?</td>
+      <td>Are B cells and granulocytes positively or negatively correlated in this patient, after controlling for others?</td>
+    </tr>
+    <tr>
+      <td>How do cell type interactions vary across spatial scales?</td>
+      <td>At which scales are Tregs repulsive or attractive toward each other?</td>
+    </tr>
+    <tr>
+      <td>Can estimated interaction parameters predict clinical outcomes?</td>
+      <td>How well does the interaction between CD8+ T cells and granulocytes predict patient survival?</td>
+    </tr>
+    <tr>
+      <td>Can we predict the distribution of an unmeasured cell type from others and spatial context?</td>
+      <td>Can we infer M2 macrophage locations in images where they weren’t directly measured?</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="links">Links</h2>
+
+<ul>
+  <li>
+<strong>Paper:</strong> <a href="https://doi.org/10.51387/24-NEJSDS66" target="_blank" rel="noopener noreferrer">Investigating Ecological Interactions in the Tumor Microenvironment Using Joint Species Distribution Models for Point Patterns</a>
+</li>
+  <li><a href="https://github.com/jeliason/mgpp_TME" target="_blank" rel="noopener noreferrer">Code</a></li>
+  <li><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/jeliason/mgpp_TME/main/mgpp_example_workflow.html" target="_blank" rel="noopener noreferrer">Vignette</a></li>
+</ul>
+
+<h2 id="key-advantages">Key Advantages</h2>
+
+<ul>
+  <li>Adjusts for spatial and patient-level covariates</li>
+  <li>Models joint interactions between multiple cell types</li>
+  <li>Provides uncertainty estimates for interaction effects</li>
+  <li>Enables prediction and residual-based model assessment</li>
+</ul>
+
+
+<!-- Comments only for posts -->
+
+
+            </article>
+        </main>
+
+        <footer>
+          <p class="copy">
+            <small> © Joel Eliason 2025
+                    <!-- | Powered by Jekyll and
+                    <a target="_blank" href="https://github.com/jitinnair1/gradfolio/">Gradfolio</a>.
+                    Last updated on 30 December 2025 -->
+            </small>
+          </p>
+
+        <div class="rounded-social-buttons">
+<a title="" class="social-button email" itemprop="email" href="mailto:%6A%65%6C%69%61%73%6F%32@%6A%68.%65%64%75" target="_blank">
+<i class="far fa-envelope"></i>
+</a><a title="" class="social-button linkedin" href="https://www.linkedin.com/in/joel-eliason/" itemprop="sameAs" target="_blank" rel="noopener noreferrer">
+<i class="fab fa-linkedin"></i>
+</a><a title="" class="social-button github" href="https://www.github.com/jeliason" itemprop="sameAs" target="_blank" rel="noopener noreferrer">
+<i class="fab fa-github"></i>
+</a>
+</div>
+
+
+        </footer>
+
+        <!-- Google Analytics Tracking code -->
+<script src="https://cdn.jsdelivr.net/npm/ga-lite@1/dist/ga-lite.min.js" async></script>
+<script>
+var galite = galite || {};
+galite.UA = '';
+</script>
+
+    </body>
+
+</html>
