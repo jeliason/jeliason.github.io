@@ -1,38 +1,39 @@
 ---
 layout: post
-title: "What Should My Initial Conditions Be?"
+title: "Scenarios, Contexts, and Observables in QSP"
 date: 2025-12-29
 tags: [qsp]
 ---
 
-Let's talk about initial conditions—time zero, or how to start the model, where to start the model at.
+Now let's talk about templated timing and treatment configurations. The reason we need those when we're recording our observables is that oftentimes we're not recording our observables in a natural state or wild-type state—a lot of times it's under some sort of intervention or essentially exogenous forcing. There's some sort of stuff happening to our patient or model, and we want to be able to capture that well when we're capturing our observables for calibrating our system.
 
-## The Spin-Up Approach
+At this stage, I'm thinking about this more abstractly without really thinking about how to write the derivation code, but essentially, during the annotation process, I want to record enough information so that derivation is simple.
 
-A commonly used method in QSP is what I call "spinning up." You basically start most things in a zero state—zero concentration or zero count. You start off with a pretty small tumor and then you just let everything evolve according to the equations until you hit a minimum tumor volume, which is a typical volume you would expect at diagnosis. And then that's sort of your actual initial conditions. From here, this is what we'd expect at diagnosis. From here on out, you set all of the species to the values that they had at this diagnosis time point, and that becomes your new time zero.
+## Defining Scenarios
 
-You're hoping that everything is sort of equilibrating or moving in the right direction no matter where you start it—whether you start everything at zero or something else, it's kind of moving to an attractor, so to speak. I mentioned that you sort of run until you get to this tumor volume or tumor diameter that you would expect. There may be other constraints for initial conditions besides this tumor volume element. This is commonly used—I'm not going to spend more time thinking about if there are other constraints for ICs for now.
+We need to predefine the scenario parts ahead of time. A scenario essentially consists of timing and events that happen in that timing. You start at time zero, you move to first diagnosis, followed by biopsies or resection, neoadjuvant therapies, maybe additional biopsies and other therapies, and hopefully patient survival (and sometimes not, of course). This can all be captured as a scenario. A lot of these things are happening to the patients—it's not just the tumor growing in a vacuum, so to speak.
 
-## Not Really Equilibration
+Some of this is dosing and dosing schedules of drugs, and that's already well captured in our QSP modeling. We can model how different chemos are administered, like nab-paclitaxel and gemcitabine. Scenarios essentially consist of these treatments or interventions, but not only treatments and interventions—also measurements. We want to be able to capture measurement events. You have all these different events happening during a scenario.
 
-We spin up to this tumor volume, and this is definitely not necessarily a steady state. Sometimes we call it "equilibration," even though the species may not equilibrate at all. It may be growing quickly at that point. Of course, that's what is happening in real patients too. It's not like when we measure their tumors that everything is equilibrated in steady state. That's obviously not true—the tumor continues to grow, cells continue to infiltrate and polarize and do their thing. So we sometimes call it equilibration, but that's definitely a misnomer.
+## Intervention Events
 
-I'm thinking right now that we have these baseline functions running from a true zero until we hit this minimum tumor volume. So maybe we need sort of an outer boundary for this time—maybe we could set it to something like the 99th percentile of expected growth time, perhaps.
+These interventions include resections, biopsies, chemo, immunotherapies. For each of these, we want to know: for resection, how much tumor is removed, what species are removed; same with biopsies. We already talked about how we already have a workflow for chemotherapy and immunotherapy drugs. We want to know at what time these things are administered, or if they're interventions, are they in certain cycles, repeat doses, amounts in the doses, etc. A lot of that stuff is already captured; some of it we don't have yet.
 
-## Defining True Zero
+## Context Mismatches
 
-Really thinking about what true zero is, how true zero is defined. Especially for PDAC, there are precursor states like IPMN. What does IPMN look like as far as the densities of different cell types, concentrations of different cytokines? Should we assume that we're starting at this true zero in an IPMN-like state? Does it matter that much?
+We've talked about context as well. The idea behind a lot of this stuff is that the context for a PDAC model is a human—a human gets a diagnosis and goes under treatment, and maybe some other things as well. But some of our observables may come from things that don't quite match that context.
 
-We can move from a zero—say, maybe it's healthy pancreas or an IPMN precursor state—move from there until we get to our minimum tumor volume. Hopefully at this diagnostic stage we're not yet at late-stage PDAC. That's what we get at resection. Of course, you're moving through these different cancer stages as well.
+Contexts are basically things that we're not able to explicitly capture in our model. We're not explicitly capturing that we're modeling human versus mouse—we don't have a switch to toggle between the two. So if we get observables from a mouse but we want to use them to help calibrate our human model, we have to add what we're currently doing: adding predefined fudge factors. These are ways to expand uncertainty a lot of times, or maybe bias the observable in different directions.
 
-## Stage-Dependent Parameters
+When we have these fudge factors, it can be useful to think: are there things that we're currently fudging—species, indication, compartment volume, etc.—that maybe we should be explicitly capturing in our model so we don't have to add this extra uncertainty? We can just try and capture whatever it is we're not capturing explicitly mechanistically. That may add more parameters and more complexity, but it may be worth it for decreasing the variance or bias that we're having to fudge with.
 
-An idea is: what if rates change over stage? Like these kinetic parameters that we have—do those change over stage? This was just a thought I had in my head. We do already have that actually, to some degree. We have these "effective" or "modulated" rates that are dependent on other species, right? We can have a cancer cell killing rate by T cells that's modulated by T-regs, modulated by CAFs, etc.
+## PDAC-Relevant Observables
 
-We'll need to make sure that any of these stage-dependent parameters are appropriately captured where they're modulated in this way. This way we can start at this time zero and appropriately capture all parameters. It's not like we need to set parameters per stage anymore. We can expect those parameters will be modulated accordingly as the tumor progresses through these stages.
+Let's move on to some of the observables that are particularly relevant for PDAC:
+- **Tumor volume over time** - a huge one
+- **Clinical data** - survival data (overall versus progression-free)
+- **Immune cell densities** - CD8+ T cell density, Treg density, TAM density, MDSC density, CAF density. Very common, all of these different counts, especially at baseline biopsies
+- **Markers** - PD-1 expression, Ki-67 proliferation indices
+- **Stromal content** - super important for PDAC. We have the dense matrix, very hard for T cells to infiltrate. We want to be able to capture that stuff.
 
-## Modeling Resections
-
-Yeah, we should probably model resections specifically. I don't know if we do that right now. That probably isn't hard—you just cut the tumor down significantly, and maybe some of the other species as well.
-
-So yeah, I think that's probably enough for this particular part. Next time I'll talk a little bit more about defining scenarios and things like that. Let's stop there for now.
+Of course, we're thinking about the time zero problem again. What should we define as time zero? Maybe I'll just get into that in later blog posts.
