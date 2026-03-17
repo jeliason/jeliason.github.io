@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1" name="viewport">
+        <link rel="stylesheet" href="/assets/css/main.css">
+
+        <a href="/" class="site-header-link">
+            <h1 class="post-headline">Joel Eliason</h1>
+            <h3 class="post-description">Postdoctoral Researcher | Popel Lab | Johns Hopkins University</h3>
+        </a>
+
+        <div class="links scroll">
+        <a href="/">Home</a>
+        <a href="https://scholar.google.com/citations?hl=en&user=tuxtAe8AAAAJ&view_op=list_works&sortby=pubdate">Google Scholar</a>
+        <a href="/projects/">Projects</a>
+        <a href="/blog/">Blog</a>
+        <a href="/assets/docs/cv.pdf">CV</a>
+
+</div>
+
+
+        <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>MAPLE: Model-Aware Parameterization from Literature Evidence | Joel Eliason</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="MAPLE: Model-Aware Parameterization from Literature Evidence" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A pipeline for extracting QSP calibration data from scientific literature and producing informative priors via joint Bayesian inference." />
+<meta property="og:description" content="A pipeline for extracting QSP calibration data from scientific literature and producing informative priors via joint Bayesian inference." />
+<link rel="canonical" href="https://joeleliason.com/projects/maple/" />
+<meta property="og:url" content="https://joeleliason.com/projects/maple/" />
+<meta property="og:site_name" content="Joel Eliason" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-17T07:25:43+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="MAPLE: Model-Aware Parameterization from Literature Evidence" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-03-17T07:25:43+00:00","datePublished":"2026-03-17T07:25:43+00:00","description":"A pipeline for extracting QSP calibration data from scientific literature and producing informative priors via joint Bayesian inference.","headline":"MAPLE: Model-Aware Parameterization from Literature Evidence","mainEntityOfPage":{"@type":"WebPage","@id":"https://joeleliason.com/projects/maple/"},"url":"https://joeleliason.com/projects/maple/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+        <!-- insert favicons, used https://realfavicongenerator.net/ -->
+<link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/assets/favicon/site.webmanifest" />
+
+
+        <!-- MathJax -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: { inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+     processEscapes: true
+    }
+  });
+</script>
+
+
+        <!-- Load fontawesome here for faster loadtimes: https://stackoverflow.com/a/35880730/9523246 -->
+        <script type="text/javascript"> (function() { var css = document.createElement('link'); css.href = 'https://use.fontawesome.com/releases/v6.7.2/css/all.css'; css.rel = 'stylesheet'; css.type = 'text/css'; document.getElementsByTagName('head')[0].appendChild(css); })(); </script>
+
+    </head>
+
+    <body>
+        <main>
+            <article>
+                <h1 class="post-headline">MAPLE: Model-Aware Parameterization from Literature Evidence</h1>
+<p class="meta">
+  <small>March 17, 2026</small>
+  
+    <small> ·
+      
+        <a href="/tags/quantitative%20systems%20pharmacology/" class="tag-link">quantitative systems pharmacology</a>, 
+      
+        <a href="/tags/Bayesian%20inference/" class="tag-link">Bayesian inference</a>, 
+      
+        <a href="/tags/prior%20elicitation/" class="tag-link">prior elicitation</a>, 
+      
+        <a href="/tags/literature%20extraction/" class="tag-link">literature extraction</a>, 
+      
+        <a href="/tags/simulation-based%20inference/" class="tag-link">simulation-based inference</a>, 
+      
+        <a href="/tags/pancreatic%20cancer/" class="tag-link">pancreatic cancer</a>, 
+      
+        <a href="/tags/LLM-assisted%20extraction/" class="tag-link">LLM-assisted extraction</a>
+      
+    </small>
+  
+</p>
+
+<h2 id="summary">Summary</h2>
+
+<p>QSP models have many biological parameters, and most can’t be measured directly in the clinical context being modeled. The relevant data is usually scattered across papers, often from different species or indications. MAPLE provides a structured pipeline for turning those measurements into informative priors that account for the gap between the experimental and model contexts.</p>
+
+<h2 id="extraction">Extraction</h2>
+
+<p>MAPLE provides two structured YAML schemas for extracting calibration data from papers.</p>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5em; margin: 1em 0;">
+<div style="border-left: 3px solid #2563eb; padding-left: 1em;">
+<strong style="color: #2563eb;">SubmodelTargets</strong> — in vitro and preclinical data with self-contained forward models (algebraic, dose-response, power law, ODE). Each target pairs extracted data with a forward model, bootstrap observation code, and a source relevance assessment.
+</div>
+<div style="border-left: 3px solid #dc2626; padding-left: 1em;">
+<strong style="color: #dc2626;">CalibrationTargets</strong> — clinical and in vivo observables (tumor volumes, immune cell densities, treatment response rates) requiring full QSP model simulation. These capture the observable, experimental context, intervention scenarios, and Monte Carlo derivation code.
+</div>
+</div>
+
+<p>Both schemas are filled out <strong>interactively using an MCP server with Claude Code</strong>. The server exposes the extraction prompt, valid enum values, a multi-step workflow guide, and hard rules that LLMs commonly violate during extraction (e.g., inventing uncertainties, using wrong input types).</p>
+
+<p>A <code class="language-plaintext highlighter-rouge">validate_target</code> tool runs three levels of checks:</p>
+
+<ul>
+  <li>
+<strong>Schema validation</strong> — Pydantic model with 30+ validators</li>
+  <li>
+<strong>Prior derivation</strong> — bootstrap + forward model inversion + distribution fitting + translation sigma</li>
+  <li>
+<strong>Snippet verification</strong> — checks that every extracted value appears in the source paper text (Europe PMC full text or source PDFs), catching hallucinated numbers before they enter the pipeline</li>
+</ul>
+
+<h2 id="inference">Inference</h2>
+
+<p>All SubmodelTargets are combined into a <strong>joint NumPyro model</strong> for MCMC inference. A source relevance rubric scores each target across eight axes — species, indication, TME compatibility, measurement directness, and others — and maps these to a translation sigma that widens the likelihood for that target. Mouse in vitro data naturally contributes less than human clinical data constraining the same parameter.</p>
+
+<p>The joint posterior is parameterized as <strong>marginal distributions + a Gaussian copula</strong> that preserves posterior correlations.</p>
+
+<h2 id="two-stage-calibration">Two-Stage Calibration</h2>
+
+<div style="display: flex; align-items: center; gap: 1em; margin: 1.5em 0; font-size: 0.95em;">
+<div style="flex: 1; background: #eff6ff; border-radius: 8px; padding: 1em; border: 1px solid #bfdbfe;">
+<strong style="color: #2563eb;">Stage 1 — MAPLE</strong><br>
+SubmodelTargets<br>
+In vitro / preclinical data<br>
+Joint MCMC (NumPyro/NUTS)<br>
+<em>Output:</em> marginals + Gaussian copula
+</div>
+<div style="font-size: 1.5em; color: #64748b;">→</div>
+<div style="flex: 1; background: #fef2f2; border-radius: 8px; padding: 1em; border: 1px solid #fecaca;">
+<strong style="color: #dc2626;">Stage 2 — qsp-sbi</strong><br>
+CalibrationTargets<br>
+Clinical data + full QSP simulator<br>
+Copula prior from Stage 1 + SBI (SNPE-C)<br>
+<em>Output:</em> final posterior
+</div>
+</div>
+
+<h2 id="links">Links</h2>
+
+<ul>
+  <li>
+<strong>Preprint:</strong> <a href="https://www.biorxiv.org/content/10.64898/2026.03.05.709623v1" target="_blank" rel="noopener noreferrer">Structured Schemas for LLM-Modeler Collaboration in Quantitative Systems Pharmacology Model Calibration</a> — bioRxiv, 2026</li>
+  <li><a href="https://github.com/popellab/maple" target="_blank" rel="noopener noreferrer">MAPLE repository</a></li>
+</ul>
+
+
+<!-- Comments only for posts -->
+
+
+            </article>
+        </main>
+
+        <footer>
+          <p class="copy">
+            <small> © Joel Eliason 2026
+                    <!-- | Powered by Jekyll and
+                    <a target="_blank" href="https://github.com/jitinnair1/gradfolio/">Gradfolio</a>.
+                    Last updated on 17 March 2026 -->
+            </small>
+          </p>
+
+        <div class="rounded-social-buttons">
+<a title="" class="social-button email" itemprop="email" href="mailto:%6A%65%6C%69%61%73%6F%32@%6A%68.%65%64%75" target="_blank">
+<i class="far fa-envelope"></i>
+</a><a title="" class="social-button linkedin" href="https://www.linkedin.com/in/joel-eliason/" itemprop="sameAs" target="_blank" rel="noopener noreferrer">
+<i class="fab fa-linkedin"></i>
+</a><a title="" class="social-button github" href="https://www.github.com/jeliason" itemprop="sameAs" target="_blank" rel="noopener noreferrer">
+<i class="fab fa-github"></i>
+</a>
+</div>
+
+
+        </footer>
+
+        <!-- Google Analytics Tracking code -->
+<script src="https://cdn.jsdelivr.net/npm/ga-lite@1/dist/ga-lite.min.js" async></script>
+<script>
+var galite = galite || {};
+galite.UA = '';
+</script>
+
+    </body>
+
+</html>
