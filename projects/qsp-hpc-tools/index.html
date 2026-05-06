@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1" name="viewport">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/assets/css/main.css">
+
+        <a href="/" class="site-header-link">
+            <h1 class="post-headline">Joel Eliason</h1>
+            <h3 class="post-description">Postdoctoral Researcher | Popel Lab | Johns Hopkins University</h3>
+        </a>
+
+        <div class="links scroll">
+        <a href="/">Home</a>
+        <a href="https://scholar.google.com/citations?hl=en&user=tuxtAe8AAAAJ&view_op=list_works&sortby=pubdate">Google Scholar</a>
+        <a href="/projects/">Projects</a>
+        <a href="/blog/">Blog</a>
+        <a href="/assets/docs/cv.pdf">CV</a>
+
+</div>
+
+
+        <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>qsp-hpc-tools: HPC orchestration and caching for QSP simulation | Joel Eliason</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="qsp-hpc-tools: HPC orchestration and caching for QSP simulation" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Run QSP simulation campaigns on SLURM clusters without writing SLURM scripts. Drop-in MATLAB and C++ backends, three-tier caching, posterior-predictive sims." />
+<meta property="og:description" content="Run QSP simulation campaigns on SLURM clusters without writing SLURM scripts. Drop-in MATLAB and C++ backends, three-tier caching, posterior-predictive sims." />
+<link rel="canonical" href="https://joeleliason.com/projects/qsp-hpc-tools/" />
+<meta property="og:url" content="https://joeleliason.com/projects/qsp-hpc-tools/" />
+<meta property="og:site_name" content="Joel Eliason" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-05-06T18:51:28+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="qsp-hpc-tools: HPC orchestration and caching for QSP simulation" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-05-06T18:51:28+00:00","datePublished":"2026-05-06T18:51:28+00:00","description":"Run QSP simulation campaigns on SLURM clusters without writing SLURM scripts. Drop-in MATLAB and C++ backends, three-tier caching, posterior-predictive sims.","headline":"qsp-hpc-tools: HPC orchestration and caching for QSP simulation","mainEntityOfPage":{"@type":"WebPage","@id":"https://joeleliason.com/projects/qsp-hpc-tools/"},"url":"https://joeleliason.com/projects/qsp-hpc-tools/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+        <!-- insert favicons, used https://realfavicongenerator.net/ -->
+<link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/assets/favicon/site.webmanifest" />
+
+
+        <!-- MathJax -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: { inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+     processEscapes: true
+    }
+  });
+</script>
+
+
+        <!-- Load fontawesome here for faster loadtimes: https://stackoverflow.com/a/35880730/9523246 -->
+        <script type="text/javascript"> (function() { var css = document.createElement('link'); css.href = 'https://use.fontawesome.com/releases/v6.7.2/css/all.css'; css.rel = 'stylesheet'; css.type = 'text/css'; document.getElementsByTagName('head')[0].appendChild(css); })(); </script>
+
+    </head>
+
+    <body>
+        <main>
+            <article>
+                <h1 class="post-headline">qsp-hpc-tools: HPC orchestration and caching for QSP simulation</h1>
+<p class="meta">
+  <small>May 06, 2026</small>
+  
+    <small> ·
+      
+        <a href="/tags/quantitative%20systems%20pharmacology/" class="tag-link">quantitative systems pharmacology</a>, 
+      
+        <a href="/tags/HPC/" class="tag-link">HPC</a>, 
+      
+        <a href="/tags/SLURM/" class="tag-link">SLURM</a>
+      
+    </small>
+  
+</p>
+
+<h2 id="what-it-does">What it does</h2>
+
+<p>QSP calibration and virtual-population work often need 10K to 100K simulations per scenario, and a clinical-prediction sweep across treatments multiplies that. <code class="language-plaintext highlighter-rouge">qsp-hpc-tools</code> runs the campaigns on a SLURM cluster over SSH and exposes a single Python interface that wraps either MATLAB / SimBiology or a C++ <code class="language-plaintext highlighter-rouge">qsp_sim</code> backend. A content-hashed cache survives model edits, so re-running a calibration loop after tweaking a target or a scenario only re-simulates what actually changed.</p>
+
+<h2 id="architecture-overview">Architecture overview</h2>
+
+<p>There’s one Python <code class="language-plaintext highlighter-rouge">Simulator</code> class per backend (<code class="language-plaintext highlighter-rouge">QSPSimulator</code> for MATLAB, <code class="language-plaintext highlighter-rouge">CppSimulator</code> for C++) with the same call signature. Each handles codebase syncing to the cluster over SSH, SLURM array-job submission and monitoring, and a three-tier content-hashed cache that decides per-call whether to hit the local pool, fetch a derived observable from the cluster, or run a fresh simulation array.</p>
+
+<p>Multi-scenario sweeps (e.g. baseline vs. nab-paclitaxel + GVAX vs. resection-only) are built into the cache key: a parameter set used under multiple scenarios runs separately under each, but where a derived observable is scenario-agnostic the cache reuses it across scenarios.</p>
+
+<h2 id="slurm-orchestration">SLURM orchestration</h2>
+
+<p><code class="language-plaintext highlighter-rouge">HPCJobManager</code> is the SSH-side glue. On submission it rsyncs the project directory to the cluster, writes a per-call array-job sbatch script, and polls <code class="language-plaintext highlighter-rouge">squeue</code> until the array finishes. Failed array indices are retried up to a configurable budget; anything still missing is returned as a NaN row in the result frame rather than a hard exception, so a single bad parameter combination doesn’t sink the whole sweep. <code class="language-plaintext highlighter-rouge">--dependency=afterok</code> chains an observable-derivation job after the C++ simulation array, so the small per-sim summary values are computed on the cluster and only those get pulled back over SSH — the raw trajectories (gigabytes per sweep) stay on the cluster.</p>
+
+<p>Authentication is whatever your SSH config already does (key-based, jump hosts, MFA prompts).</p>
+
+<h2 id="three-tier-content-hashed-cache">Three-tier content-hashed cache</h2>
+
+<p>The cache pays off most when the model, priors, and scenarios are stable and you’re iterating on observable code or downstream analysis (e.g. adding a new observable to compute against an existing simulation pool, or re-running a posterior-predictive analysis with the same theta draws). When the model, a scenario, or the prior changes, the relevant tier invalidates and a fresh sweep runs. The tiers, in lookup order:</p>
+
+<ol>
+  <li>
+<strong>Local pool.</strong> Simulation results cached on the laptop or workstation, keyed by model version, scenario, and the parameter set. Cache hits here cost nothing and are enough for re-running a posterior-predictive analysis or changing how a downstream observable is computed.</li>
+  <li>
+<strong>HPC summary observables.</strong> Already-derived observable values stored on the cluster, keyed by the same identity. Pulled down on demand and cheaper than re-deriving from raw trajectories.</li>
+  <li>
+<strong>HPC full simulations.</strong> Raw per-sim trajectories on the cluster, used when a <em>new</em> observable needs to be computed against an existing simulation pool.</li>
+</ol>
+
+<p>If none hit, the simulator submits a fresh SLURM array. The <code class="language-plaintext highlighter-rouge">config_hash</code> covers the simulator binary content, the parameter-XML template, and the scenario YAML, so a simulator rebuild or a scenario edit invalidates the right tier without manual cache invalidation. Adding a new observable against an existing simulation pool only triggers tier 3, not a fresh sweep.</p>
+
+<figure style="text-align: center; margin: 1.5em 0;">
+<img src="/assets/images/qsp-hpc-tools-cache.svg" alt="Three-tier cache flow diagram" style="max-width: 720px; width: 100%;">
+<figcaption style="font-size: 0.9em; color: #666; margin-top: 0.5em;">Each request walks down the tiers. The miss labels on the left are the conditions that force a fall-through; on the right, any tier that hits returns the result directly. The bottom path runs a fresh simulation array.</figcaption>
+</figure>
+
+<h2 id="the-c-backend">The C++ backend</h2>
+
+<p><code class="language-plaintext highlighter-rouge">CppSimulator</code> is the preferred path for new work; the MATLAB backend is the legacy path. C++ sources are generated by <a href="/projects/qsp-codegen/">qsp-codegen</a> from your SBML export, so model authoring stays in SimBiology and the C++ binary is a build artifact. <code class="language-plaintext highlighter-rouge">qsp-hpc-tools</code> handles the cluster-side build (pip-installing <code class="language-plaintext highlighter-rouge">qsp-codegen</code> into a project venv, running <code class="language-plaintext highlighter-rouge">cmake</code> and caching the binary by content hash) and parses the raw-binary trajectory format the binary emits into a MATLAB-compatible Parquet so downstream caching and observable derivation work unchanged.</p>
+
+<p>Speedups on representative QSP scenarios run 25× to 87× over the MATLAB workers; the speedup grows with simulation length because the per-sim setup overhead in MATLAB amortises poorly over short sims. The C++ binary writes species, compartments, and assignment-rule values to companion files alongside the trajectory, so any model parameter referenced by a calibration target is available downstream as <code class="language-plaintext highlighter-rouge">species_dict[name]</code>.</p>
+
+<h2 id="inference-time-use-simulate_with_parameters">Inference-time use: <code class="language-plaintext highlighter-rouge">simulate_with_parameters</code>
+</h2>
+
+<p><code class="language-plaintext highlighter-rouge">simulate_with_parameters(theta, backend="local"|"hpc")</code> is the entry point that posterior predictive checks and OBED retraining sweeps call. The argument is an <code class="language-plaintext highlighter-rouge">(n, n_params)</code> matrix of thetas (typically posterior draws from <a href="/projects/qsp-inference/">qsp-inference</a>), not a sample size to draw from a prior. Each row is hashed, the cache is consulted, and only the rows that miss are simulated. Local and HPC backends return the same DataFrame shape so calling code doesn’t need to branch on backend.</p>
+
+<p><code class="language-plaintext highlighter-rouge">restriction_classifier_dir=...</code> rejection-samples the prior against a <code class="language-plaintext highlighter-rouge">qsp_inference.inference.RestrictionClassifier</code> before any simulator job is submitted, so simulator time isn’t burned on draws that always fail (typically tumors that never reach detectable size). Lognormal, normal, uniform, and Beta priors are supported in the prior CSV.</p>
+
+<h2 id="burn-in-caching-across-scenarios">Burn-in caching across scenarios</h2>
+
+<p>Many QSP scenarios share a long pre-treatment “evolve to diagnosis” segment that’s the dominant cost per simulation. Setting <code class="language-plaintext highlighter-rouge">evolve_trajectory_dir=...</code> on a sim call dumps each per-sim post-evolve ODE state to disk; subsequent calls under different scenarios pick up from the cached state instead of re-evolving. The dumps are packed into a single LMDB file and invalidation is content-hashed against the upstream parameter set.</p>
+
+<p><code class="language-plaintext highlighter-rouge">assemble_evolve_trajectory_long</code> pivots the per-sim dumps into a long-form pandas DataFrame so trajectory plots can reuse the same observable definition the inference was conditioned on (via <code class="language-plaintext highlighter-rouge">qsp_inference.inference.evaluate_calibration_target_over_trajectory</code>).</p>
+
+<h2 id="stack">Stack</h2>
+
+<ul>
+  <li>
+<a href="/projects/qsp-codegen/">qsp-codegen</a>: SBML to C++ CVODE simulator that this package builds and runs</li>
+  <li>qsp-hpc-tools: this package</li>
+  <li>
+<a href="/projects/qsp-inference/">qsp-inference</a>: Bayesian inference consumer of the simulator</li>
+</ul>
+
+<h2 id="links">Links</h2>
+
+<ul>
+  <li><a href="https://github.com/popellab/qsp-hpc-tools" target="_blank" rel="noopener noreferrer">GitHub repository</a></li>
+  <li><a href="https://github.com/popellab/qsp-hpc-tools/blob/main/docs/SIMULATE_WITH_PARAMETERS.md" target="_blank" rel="noopener noreferrer"><code class="language-plaintext highlighter-rouge">simulate_with_parameters</code> guide</a></li>
+  <li><a href="https://github.com/popellab/qsp-hpc-tools/blob/main/docs/EVOLVE_TRAJECTORIES.md" target="_blank" rel="noopener noreferrer">Evolve trajectories guide</a></li>
+  <li><a href="https://github.com/popellab/qsp-hpc-tools/blob/main/docs/CONFIGURATION.md" target="_blank" rel="noopener noreferrer">Configuration guide</a></li>
+  <li><a href="https://github.com/popellab/qsp-hpc-tools/blob/main/docs/CPP_SIMULATION_PLAN.md" target="_blank" rel="noopener noreferrer">C++ simulation plan</a></li>
+  <li><a href="https://github.com/popellab/qsp-hpc-tools/blob/main/docs/ARCHITECTURE.md" target="_blank" rel="noopener noreferrer">Architecture overview</a></li>
+</ul>
+
+
+<!-- Comments only for posts -->
+
+
+            </article>
+        </main>
+
+        <footer>
+          <p class="copy">
+            <small> © Joel Eliason 2026
+                    <!-- | Powered by Jekyll and
+                    <a target="_blank" href="https://github.com/jitinnair1/gradfolio/">Gradfolio</a>.
+                    Last updated on 06 May 2026 -->
+            </small>
+          </p>
+
+        <div class="rounded-social-buttons">
+<a title="" class="social-button email" itemprop="email" href="mailto:%6A%65%6C%69%61%73%6F%32@%6A%68.%65%64%75" target="_blank">
+<i class="far fa-envelope"></i>
+</a><a title="" class="social-button linkedin" href="https://www.linkedin.com/in/joel-eliason/" itemprop="sameAs" target="_blank" rel="noopener noreferrer">
+<i class="fab fa-linkedin"></i>
+</a><a title="" class="social-button github" href="https://www.github.com/jeliason" itemprop="sameAs" target="_blank" rel="noopener noreferrer">
+<i class="fab fa-github"></i>
+</a>
+</div>
+
+
+        </footer>
+
+        <!-- Google Analytics Tracking code -->
+<script src="https://cdn.jsdelivr.net/npm/ga-lite@1/dist/ga-lite.min.js" async></script>
+<script>
+var galite = galite || {};
+galite.UA = '';
+</script>
+
+    </body>
+
+</html>
