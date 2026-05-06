@@ -84,13 +84,18 @@ body {
   }
 }
 
-.tag-link {
+a.tag-link,
+p a.tag-link {
   text-decoration: none;
+  color: $brand-color;
+  background: none;
+  box-shadow: none;
   &:hover {
-    background-color: #ddd;
-    @media (prefers-color-scheme: dark) {
-      background-color: #444;
-    }
+    color: $brand-color;
+    text-decoration: underline;
+    background: none;
+    background-color: transparent;
+    box-shadow: none;
   }
 }
 
@@ -99,16 +104,22 @@ body {
   margin: 1.5em 0;
 }
 
-.tag-chip {
+a.tag-chip,
+p a.tag-chip {
   display: inline-block;
   background-color: #f0f0f0;
+  color: $brand-color;
   padding: 0.3em 0.8em;
   margin: 0.2em;
   border-radius: 15px;
   text-decoration: none;
+  box-shadow: none;
 
   &:hover {
-    background-color: #ddd;
+    background-color: #e6e1d6;
+    color: $brand-color;
+    text-decoration: underline;
+    box-shadow: none;
   }
 
   @media (prefers-color-scheme: dark) {

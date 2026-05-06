@@ -96,8 +96,8 @@ code {
   color: #859900;
 }
 
-// For dark mode
-@media (prefers-color-scheme: dark) {
+// For dark mode (disabled — parchment theme uses the light syntax theme above)
+@media (prefers-color-scheme: never) {
 
 pre.highlight {
   background-color: #263238;
